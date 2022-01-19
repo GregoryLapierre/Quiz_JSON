@@ -85,10 +85,10 @@ const createAnswers = (value) => {
                 if(radio.length == 25){
 
                     if(value[i].réponse == AnswerElement.value){
-                        AnswerNode.style.backgroundColor = "green";
+                        AnswerNode.style.backgroundColor = "#5FA543";
                     }
                     else if(value[i].réponse != AnswerElement.value){
-                        AnswerNode.style.backgroundColor = "red";
+                        AnswerNode.style.backgroundColor = "#F9554C";
                     }
                     else{
                         AnswerNode.style.backgroundColor = "none";
@@ -130,14 +130,14 @@ function checkAnswer()
 
             }
 
-            const score = document.createElement("h1");
+            const score = document.createElement("h3");
             score.innerHTML = "Votre score est de : " + currentScore;
             div1.appendChild(score);
             btn.style.display="none"
 
         }
         else{
-            return alert("Vous n'avez répondu à toutes les questions")
+            return alert("Vous n'avez pas répondu à toutes les questions")
         }
 
 }   
