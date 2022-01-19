@@ -1,0 +1,27 @@
+h1{
+    text-align: center;
+    font-size: 50px;
+}
+
+#container{
+    display: flex;
+    flex-direction: column;
+    }
+
+h2{
+    margin-top: 50px;
+    margin-left: 15px;
+}
+
+#myRadio{
+    margin: 5px 7px 0 50px;
+}
+
+#Btn_Submit{
+    /* width: 200px; */
+    margin: 50px auto;
+    font-size: x-large;
+    padding: 10px 15px;
+    display: block;
+    
+}
