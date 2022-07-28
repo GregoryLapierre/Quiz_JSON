@@ -1,148 +1,199 @@
 var quiz = [];
-const div1= document.getElementById("container")
+const container = document.getElementById("container")
 var currentScore = 0;
 var btn = document.getElementById('Btn_Submit');
 var radio = [];
 
-var url = "https://xora123.github.io/Kélian.json"; // url du fichier JSON
-
-async function getData() {
-    // Fonction pour prendre les data de mon fichier JSON
-    var responce = await fetch(url);
-    var data = await responce.json();
-
-    // console.log(data)
-    shuffleArray(data.quizz.fr.débutant);
-    return data.quizz.fr.débutant;
-    }
-
-    const copyMyData = async (data) => {
-    // Fonction Pour remplir mon Tab vide pour pouvoir l'utiliser partout
-    const tab = await getData(data);
-    quiz.push(...tab);
+//je crée mon tableau de score
+const table = document.createElement('table')
+const tr = document.createElement('tr')
+const th = document.createElement('th')
+th.setAttribute("colspan", "2")
+tr.setAttribute("class", "titleTab")
+const titleText = document.createTextNode('Les 5 meilleurs scores')
+th.appendChild(titleText)
+tr.appendChild(th)
+table.appendChild(tr)
+arrayResult.appendChild(table)
+for (let i = 0; i < 5; i++){
+    var getResult = JSON.parse(localStorage.getItem("Score"))
+    console.log(getResult)
+    const td1 = document.createElement('td')
+    const tr1 = document.createElement('tr')
+    var nameText = document.createTextNode(getResult[i].Nom)
+    var scoreText = document.createTextNode(getResult[i].Score)
+    const td2 = document.createElement('td')
     
-    var proposition = quiz.propositions;
-    // console.log (proposition);
-    
-    return quiz;
-};
-
-  //Fonction tri aléatoire
-function shuffleArray(array) {
-    return array.sort(() => 0.5 - Math.random());
+    td1.appendChild(nameText)
+    td2.appendChild(scoreText)
+    tr1.appendChild(td1)
+    tr1.appendChild(td2)
+    table.appendChild(tr1)
+    arrayResult.appendChild(table)
 }
 
-const createAnswers = (value) => {
+// Stockage du fichier JSON dans une variable
+var Json = "/JASON.json";
 
-    // console.log(quiz[0].question)
-    // console.log(quiz)
-    for(let i=0;i<25;i++){
-    
-        const div= document.createElement("div")
-        div.setAttribute("class","anecdote"+i)
-        //document.getElementById('question'+(i+1)).innerHTML= quiz[i].question
-        const QuestElement = document.createElement("h2"); // Ici on crée toute les question en fonction la taille de value, ici 30 - 10 (-10 pour pas que ce soit les mêmes questions)
-        const QuestNode = document.createTextNode(value[i].question); // Ici on crée un textnode pour mettre les questions dans h2
-        QuestElement.appendChild(QuestNode); // Ici on le fait spawn
-        div1.appendChild(QuestElement);
-        div1.appendChild(div);
-        
-       
+// Fonction asynchrone pour recevoir les datas du fichier JSON et les retourner dans un array trié
+async function dataShuffleJson() {
+    var data = await fetch(Json);
+    var newJson = await data.json();
+    quiz.push(...newJson.quizz.fr.débutant, ...newJson.quizz.fr.confirmé, ...newJson.quizz.fr.expert);
+    quiz.sort(() => 0.5 - Math.random());
+    return quiz;
+}
 
-        /* Boucle for pour afficher les propositions des questions */
-        for(let j=0;j<4;j++){
+//fonction pour afficher toutes les questions, les propositions, les couleurs des réponses
+function answer(value){
+    //1ere boucle pour afficher les 25 questions, boutons radio, propositions et couleurs des réponses
+    for (let i = 0; i < 25; i++) {
+        const div = document.createElement("div")
+        div.setAttribute("class", "anecdote" + i)
+        const QuestElement = document.createElement("h2"); 
+        const QuestNode = document.createTextNode(value[i].question); 
+        QuestElement.appendChild(QuestNode); 
+        container.appendChild(QuestElement);
+        container.appendChild(div);
 
-            const div2=document.createElement("div2")
-            const AnswerElement = document.createElement("input")
-            AnswerElement.type="radio"
-            AnswerElement.id="myRadio"
-            AnswerElement.class="btn_radio"
-            AnswerElement.setAttribute("value",value[i].propositions[j])
-            
-            const nameRadios = () => 
-                {  // On met tout les input radio , dans un array
-                const allRadios = [...document.querySelectorAll(`[type='radio']`)];// Chaque groupe de 4 inputs radio auront un nom unique
-                    for (let i = 0; i < allRadios.length; i++)
-                    {
-                    let q = Math.floor(i / 4);
-                    allRadios[i].name = `rad${q}`;
-                    }
-                }
-            nameRadios(); 
+        /* Boucle for pour afficher les inputs radio et les propositions des questions et les labels*/
+        for (let j = 0; j < 4; j++) {
+            const div2 = document.createElement("div")
+            const answerRadio = document.createElement("input")
+            answerRadio.type = "radio"
+            answerRadio.id = "myRadio" + i + j
+            answerRadio.name = "radio" + i
+            answerRadio.classList = "btn_radio"
+            answerRadio.setAttribute("value", value[i].propositions[j])
 
-            const AnswerNode = document.createElement("label")
-            AnswerNode.classList = "label";
-            AnswerNode.name = "btn_radio";    
-            AnswerNode.setAttribute("for", "myRadio" + j); // Ici on le setUnAttribut
+            // Création label
+            const answerLabel = document.createElement("label")
+            answerLabel.classList = "label";
+            answerLabel.setAttribute("for", "myRadio" + i + j);
             const Answer = document.createTextNode(value[i].propositions[j])
-            AnswerNode.appendChild(Answer)
-            div2.appendChild(AnswerElement)
-            div2.appendChild(AnswerNode)
-            div1.appendChild(div2)
+            answerLabel.appendChild(Answer)
+            div2.appendChild(answerRadio)
+            div2.appendChild(answerLabel)
+            container.appendChild(div2)
 
             /* Evenement pour les couleurs */
             btn.addEventListener("click", () => {
-                if(radio.length == 25){
-
-                    if(value[i].réponse == AnswerElement.value){
-                        AnswerNode.style.backgroundColor = "#5FA543";
-                    }
-                    else if(value[i].réponse != AnswerElement.value){
-                        AnswerNode.style.backgroundColor = "#F9554C";
-                    }
-                    else{
-                        AnswerNode.style.backgroundColor = "none";
-                    }
-                }
-                else{
-                    return
+                if (radio.length == 25) {
+                    answerLabel.style.backgroundColor = value[i].réponse == answerRadio.value ? "#5FA543" : "#F9554C";
                 }
             });
-            /* FIN Evenement pour les couleurs */
-        } 
+        }
     }
 }
 
-btn.addEventListener('click',checkAnswer)/* Evenement pour déclencher la fonction */
+/* Evenement pour déclencher les réponses et le résultat*/
+btn.addEventListener('click', checkAnswer)
+
 /* Incrémenter le score */
-function checkAnswer()
-{  
-    radio=document.querySelectorAll('input:checked')
-        
-        if(radio.length == 25){
-            for(let i = 0; i < 25 ; i++)
-            {
-                
-                if(radio[i].value == quiz[i].réponse){
-                    currentScore++
-                    console.log(currentScore)
-                }
-
-                    /* AFFICHAGE DE L'ANECDOTE AU CLIC */
-                const anecdote = document.createElement('p');
-                const textAnecdote = document.createTextNode(quiz[i].anecdote);
-                anecdote.appendChild(textAnecdote);   
-                
-               
-                document.querySelector(".anecdote"+i).appendChild(anecdote);
-                
-                /* FIN DE L'AFFICHAGE DE L'ANECDOTE AU CLIC */
-
+function checkAnswer() {
+    radio = document.querySelectorAll('input:checked')
+    if (radio.length == 25) {
+        for (let i = 0; i < 25; i++) {
+            if (radio[i].value == quiz[i].réponse) {
+                currentScore++
             }
+            // Affichage de l'anecdote
+            const anecdote = document.createElement('p');
+            const textAnecdote = document.createTextNode(quiz[i].anecdote);
+            anecdote.appendChild(textAnecdote);
 
-            const score = document.createElement("h3");
-            score.innerHTML = "Votre score est de : " + currentScore;
-            div1.appendChild(score);
-            btn.style.display="none"
-
+            document.querySelector(".anecdote" + i).appendChild(anecdote);
         }
-        else{
-            return alert("Vous n'avez pas répondu à toutes les questions")
+        const score = document.createElement("h3");
+        score.innerHTML = "Votre score est de : " + currentScore;
+        container.appendChild(score);
+        //bouton réponse disparait
+        btn.style.display = "none"
+        //input avec bouton pour ajouter un nom apparait
+        insertName()
+        window.scroll(0, 5000)
+    }
+    else {
+        return alert("Vous n'avez pas répondu à toutes les questions")
+    }
+}
+
+function insertName() {
+    //création d'un formulaire
+    const divInsertName = document.createElement('form')
+    divInsertName.setAttribute("class", "ajout")
+
+    //création div pour input text et bouton ajouter 
+    const div_btn_ajouter = document.createElement('div')
+    div_btn_ajouter.setAttribute("class", "ajouter")
+
+    //création label
+    const textElement = document.createElement('label')
+    const textAjouter = document.createTextNode("Veuillez entrer votre nom et cliquez sur Ajouter")
+    textElement.appendChild(textAjouter)
+    divInsertName.appendChild(textElement)
+
+    //création input text
+    var inputName = document.createElement('input')
+    inputName.type = "text"
+    inputName.id = "inputNames"
+    inputName.minLength = "3"
+    inputName.maxLength = "16"
+    inputName.placeholder = "Votre nom"
+    div_btn_ajouter.appendChild(inputName)
+
+    //création bouton Ajouter et div bouton
+    const btn_add_name = document.createElement('button')
+    btn_add_name.type = "submit"
+    btn_add_name.id = "btn_add"
+    const name_ajouter = document.createTextNode('Ajouter')
+    btn_add_name.appendChild(name_ajouter)
+    div_btn_ajouter.appendChild(btn_add_name)
+
+    //insertion de tout le contenu dans la page sous le score
+    divInsertName.appendChild(div_btn_ajouter)
+    container.appendChild(divInsertName)
+
+    btn_add.addEventListener('click', lclStorage)/* Evenement pour déclencher la fonction */
+}
+
+function lclStorage(event) {
+    if (document.getElementById("inputNames").value != ""){      
+    // je récupère le contenu du localstorage dans une variable
+    // attention, la variable peut être vide
+        var getArray = JSON.parse(localStorage.getItem("Score"))
+        if(getArray === null){
+            getArray = []  
         }
 
-}   
+        // je récupère mes données de score et je créer un objet qui les contient
+        var name = document.getElementById("inputNames").value
+        let objectScore = {
+            'Nom' : name,
+            'Score': currentScore
+        };
+
+        // je rajoute mon score dans le tableau (la variable précédente)
+        getArray.push(objectScore)
+
+        // je trie le tableau par ordre de score decroissant
+        getArray.sort(function (a, b) {
+            return b.Score - a.Score;
+        });
+
+        // je récupère les 5 premiers scores du tableau
+        var arrayScore = getArray.slice(0, 5)
+        
+        // je met mon tablau dans le localstorage
+        localStorage.setItem("Score", JSON.stringify(arrayScore))
+    }
+    else{
+        event.preventDefault()
+        return alert("Le champ est vide")
+    }
+}
 
 window.addEventListener("load", async function () {
-    await copyMyData();
-    createAnswers(quiz);
-    }); 
+    await dataShuffleJson();
+    answer(quiz);
+}); 

@@ -1,0 +1,78 @@
+body{
+    background-color: rgb(214, 214, 214);
+}
+
+h1{
+    text-align: center;
+    font-size: 50px;
+}
+
+#container{
+    display: flex;
+    flex-direction: column;
+    }
+
+#arrayResult{
+    display: flex;
+    justify-content: center;
+}   
+
+h2{
+    margin-top: 50px;
+    margin-left: 15px;
+}
+
+#myRadio{
+    margin: 5px 7px 0 50px;
+}
+
+#Btn_Submit{
+    margin: 40px auto;
+    font-size: x-large;
+    padding: 10px 15px;
+    display: block;
+    }
+
+p{
+    margin: 0 0 10px 30px;
+}
+
+h3{
+    text-align: center;
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.ajout{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 40px;
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.ajouter{
+    width: 225px;
+    display: flex;
+    justify-content: space-between;
+}
+
+table,
+td {
+    border: 1px solid #333;
+}
+
+td{
+    min-width: 100px;
+    text-align: center;
+}
+
+.titleTab{
+    background-color: #333;
+    color: #fff;
+}
+
+.btn_radio{
+    margin-left: 100px;
+}
