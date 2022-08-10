@@ -5,6 +5,7 @@ var btn = document.getElementById('Btn_Submit');
 var radio = [];
 
 //je crée mon tableau de score
+if(JSON.parse(localStorage.getItem("Score")) != null){
 const table = document.createElement('table')
 const tr = document.createElement('tr')
 const th = document.createElement('th')
@@ -15,23 +16,23 @@ th.appendChild(titleText)
 tr.appendChild(th)
 table.appendChild(tr)
 arrayResult.appendChild(table)
-for (let i = 0; i < 5; i++){
-    var getResult = JSON.parse(localStorage.getItem("Score"))
-    console.log(getResult)
-    const td1 = document.createElement('td')
-    const tr1 = document.createElement('tr')
-    var nameText = document.createTextNode(getResult[i].Nom)
-    var scoreText = document.createTextNode(getResult[i].Score)
-    const td2 = document.createElement('td')
-    
-    td1.appendChild(nameText)
-    td2.appendChild(scoreText)
-    tr1.appendChild(td1)
-    tr1.appendChild(td2)
-    table.appendChild(tr1)
-    arrayResult.appendChild(table)
-}
 
+var getResult = JSON.parse(localStorage.getItem("Score")) || []
+    for (let i = 0; i < Math.min(5, getResult.length); i++){
+        const td1 = document.createElement('td')
+        const tr1 = document.createElement('tr')
+        var nameText = document.createTextNode(getResult[i].Nom)
+        var scoreText = document.createTextNode(getResult[i].Score)
+        const td2 = document.createElement('td')
+        
+        td1.appendChild(nameText)
+        td2.appendChild(scoreText)
+        tr1.appendChild(td1)
+        tr1.appendChild(td2)
+        table.appendChild(tr1)
+        arrayResult.appendChild(table)
+    }
+}
 // Stockage du fichier JSON dans une variable
 var Json = "/JASON.json";
 
